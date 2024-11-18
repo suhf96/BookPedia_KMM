@@ -76,6 +76,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
         }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
         dependencies {
             ksp(libs.androidx.room.compiler)
         }

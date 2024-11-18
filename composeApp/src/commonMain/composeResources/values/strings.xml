@@ -1,0 +1,4 @@
+<resources>
+    <string name="placeholder">Search for a book</string>
+    <string name="close_hint">clear_content</string>
+</resources>

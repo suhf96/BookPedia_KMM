@@ -1,0 +1,8 @@
+<resources>
+    <string name="placeholder">Search for a book</string>
+    <string name="close_hint">clear_content</string>
+    <string name="search_result_tab">Search results</string>
+    <string name="favourites_tab">Favourites</string>
+    <string name="no_result">No results for search query</string>
+    <string name="no_favourites">No favourite books yet...</string>
+</resources>

@@ -78,8 +78,14 @@ fun BookListScreen(
 
     }
 
-    LaunchedEffect(key1 = state.favouriteBooks) {
-        favouritesListState.animateScrollToItem(0)
+    LaunchedEffect(key1 = state.selectedTabIndex) {
+        pagerState.animateScrollToPage(state.selectedTabIndex)
+
+    }
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        if (pagerState.isScrollInProgress) {
+            onAction(BookListAction.OnTabSelected(pagerState.currentPage))
+        }
 
     }
     Column(

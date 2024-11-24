@@ -53,6 +53,7 @@ fun BookListScreenRoot(
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
     BookListScreen(
         state = state,
         onBookClick = { onBookClick() },
@@ -75,13 +76,17 @@ fun BookListScreen(
     val favouritesListState = rememberLazyListState()
     LaunchedEffect(key1 = state.searchResults) {
         searchResultsListState.animateScrollToItem(0)
+    }
+    LaunchedEffect(key1 = state.selectedTabIndex) {
+        pagerState.animateScrollToPage(state.selectedTabIndex)
 
     }
-
-    LaunchedEffect(key1 = state.favouriteBooks) {
-        favouritesListState.animateScrollToItem(0)
-
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        if (pagerState.isScrollInProgress) {
+            onAction(BookListAction.OnTabSelected(pagerState.currentPage))
+        }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

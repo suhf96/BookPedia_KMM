@@ -18,24 +18,16 @@ import com.gyadam.booklibrary.bookLibrary.presentation.book_list.BookListViewMod
 import com.gyadam.booklibrary.core.data.HttpClientFactory
 import io.ktor.client.engine.HttpClientEngine
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 @Preview
-fun App(engine: HttpClientEngine) {
+fun App() {
+    val viewModel = koinViewModel<BookListViewModel>()
     MaterialTheme {
         BookListScreenRoot(
-            viewModel = remember {
-                BookListViewModel(
-                    repository = DefaultBookRepository(
-                        remoteBookDatasource = KtorRemoteBookDataSource(
-                            httpClient = HttpClientFactory.create(
-                                engine
-                            )
-                        )
-                    )
-                )
-            },
+            viewModel = viewModel,
             onBookClick = { },
         )
     }

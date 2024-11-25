@@ -37,6 +37,7 @@ import booklibrary.composeapp.generated.resources.favourites_tab
 import booklibrary.composeapp.generated.resources.no_favourites
 import booklibrary.composeapp.generated.resources.no_result
 import booklibrary.composeapp.generated.resources.search_result_tab
+import com.gyadam.booklibrary.bookLibrary.domain.Book
 import com.gyadam.booklibrary.bookLibrary.presentation.book_list.components.BookList
 import com.gyadam.booklibrary.bookLibrary.presentation.book_list.components.BookSearchBar
 import com.gyadam.booklibrary.core.presentation.DarkBlue
@@ -49,15 +50,20 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun BookListScreenRoot(
     viewModel: BookListViewModel = koinViewModel(),
-    onBookClick: () -> Unit,
+    onBookClick: (book: Book) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     BookListScreen(
         state = state,
-        onBookClick = { onBookClick() },
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                is BookListAction.OnBookClick -> onBookClick(action.book)
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
@@ -65,7 +71,6 @@ fun BookListScreenRoot(
 fun BookListScreen(
     state: BookListState,
     onAction: (BookListAction) -> Unit,
-    onBookClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -88,7 +93,7 @@ fun BookListScreen(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(DarkBlue)
             .statusBarsPadding(),

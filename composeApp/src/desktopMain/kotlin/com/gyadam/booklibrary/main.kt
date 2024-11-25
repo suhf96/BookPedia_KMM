@@ -10,8 +10,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "BookLibrary",
     ) {
-        App(
-            engine = remember { OkHttp.create() }
-        )
+        App()
     }
 }

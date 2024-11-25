@@ -1,5 +1,7 @@
 package com.gyadam.booklibrary.bookLibrary.presentation.book_list.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,19 +31,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import booklibrary.composeapp.generated.resources.Res
 import booklibrary.composeapp.generated.resources.book_error_2
+import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.gyadam.booklibrary.bookLibrary.domain.Book
 import com.gyadam.booklibrary.core.presentation.LightBlue
 import com.gyadam.booklibrary.core.presentation.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.round
-
 @Composable
 fun BookListItem(
     book: Book,
@@ -50,19 +54,21 @@ fun BookListItem(
 ) {
     Surface(
         shape = RoundedCornerShape(32.dp),
-        modifier = modifier.clickable { onClick() },
+        modifier = modifier
+            .clickable(onClick = onClick),
         color = LightBlue.copy(alpha = 0.2f)
     ) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
-                .height(140.dp),
+                .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Box(
-                modifier = Modifier.height(100.dp),
+                modifier = Modifier
+                    .height(100.dp),
                 contentAlignment = Alignment.Center
             ) {
                 var imageLoadResult by remember {
@@ -71,38 +77,61 @@ fun BookListItem(
                 val painter = rememberAsyncImagePainter(
                     model = book.imageUrl,
                     onSuccess = {
-
-                        if (it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1) {
-                            Result.success(it.painter)
-                        } else {
-                            Result.failure(IllegalArgumentException("Invalid image size"))
-                        }
-
+                        imageLoadResult =
+                            if (it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1) {
+                                Result.success(it.painter)
+                            } else {
+                                Result.failure(Exception("Invalid image size"))
+                            }
                     },
                     onError = {
                         it.result.throwable.printStackTrace()
                         imageLoadResult = Result.failure(it.result.throwable)
                     }
+                )
 
+                val painterState by painter.state.collectAsStateWithLifecycle()
+                val transition by animateFloatAsState(
+                    targetValue = if(painterState is AsyncImagePainter.State.Success) {
+                        1f
+                    } else {
+                        0f
+                    },
+                    animationSpec = tween(durationMillis = 800)
                 )
 
                 when (val result = imageLoadResult) {
                     null -> CircularProgressIndicator()
                     else -> {
                         Image(
-                            painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error_2),
-                            contentDescription = "Book image",
-                            contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
-                            modifier = Modifier.aspectRatio(
-                                ratio = 0.65f,
-                                matchHeightConstraintsFirst = true
-                            )
+                            painter = if (result.isSuccess) painter else {
+                                painterResource(Res.drawable.book_error_2)
+                            },
+                            contentDescription = book.title,
+                            contentScale = if (result.isSuccess) {
+                                ContentScale.Crop
+                            } else {
+                                ContentScale.Fit
+                            },
+                            modifier = Modifier
+                                .aspectRatio(
+                                    ratio = 0.65f,
+                                    matchHeightConstraintsFirst = true
+                                )
+                                .graphicsLayer {
+                                    rotationX = (1f - transition) * 30f
+                                    val scale = 0.8f + (0.2f * transition)
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
                         )
                     }
                 }
             }
             Column(
-                modifier = Modifier.fillMaxHeight().weight(1f),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -111,36 +140,36 @@ fun BookListItem(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                if (book.authors.isNotEmpty()) {
+                book.authors.firstOrNull()?.let { authorName ->
                     Text(
-                        text = book.authors.joinToString(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = authorName,
+                        style = MaterialTheme.typography.bodyLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                book.ratingCount?.let { rating ->
-                    Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
+                book.averageRating?.let { rating ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
-                            text = "${round((rating * 10).toDouble()) / 10.0}",
+                            text = "${round(rating * 10) / 10.0}",
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Icon(
                             imageVector = Icons.Default.Star,
-                            contentDescription = "favourite",
+                            contentDescription = null,
                             tint = SandYellow
                         )
                     }
                 }
-
             }
             Icon(
-                imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = "nav",
-                modifier = Modifier.size(36.dp)
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(36.dp)
             )
         }
-
     }
-
 }

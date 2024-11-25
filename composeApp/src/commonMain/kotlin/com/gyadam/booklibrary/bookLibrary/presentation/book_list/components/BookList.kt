@@ -33,6 +33,7 @@ fun BookList(
                 it.id
             }
         ) { book ->
+            println("Book cover : ${book.imageUrl}")
             BookListItem(
                 book = book,
                 modifier = Modifier

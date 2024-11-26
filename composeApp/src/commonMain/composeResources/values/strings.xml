@@ -13,4 +13,12 @@
     <string name="error_server_error">A server error occurred. Please try again later.</string>
     <string name="error_serialization">Data serialization error. Please try again later.</string>
     <string name="error_remote_unknown">An unknown remote error occurred.</string>
+    <string name="book_cover_descp">Book cover</string>
+    <string name="book_rating_descp">Rating</string>
+    <string name="book_pages_descp">Pages</string>
+    <string name="book_languages_descp">Languages</string>
+    <string name="book_synopsis_descp">Synopsis</string>
+    <string name="book_description_unavailable">Description unavailable</string>
+    <string name="go_back_content_descp">go back</string>
+    <string name="remove_favourites">Remove from favourites</string>
 </resources>

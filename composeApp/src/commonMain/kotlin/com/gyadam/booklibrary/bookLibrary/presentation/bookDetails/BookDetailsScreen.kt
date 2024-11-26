@@ -5,8 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gyadam.booklibrary.bookLibrary.presentation.bookDetails.components.BlurredImageBackgroud
-import org.koin.compose.viewmodel.koinViewModel
+import com.gyadam.booklibrary.bookLibrary.presentation.bookDetails.components.BlurredImageBackground
 
 @Composable
 fun BookDetailScreenRoot(
@@ -36,7 +35,7 @@ private fun BookDetailScreen(
     modifier: Modifier = Modifier
 ) {
 
-        BlurredImageBackgroud(
+        BlurredImageBackground(
             imageUrl = state.book?.imageUrl ?: "",
             isFavourite = state.isFavourite,
             onFavouriteClick = {

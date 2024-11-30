@@ -1,4 +1,4 @@
-package com.gyadam.booklibrary.bookLibrary.presentation.book_list.components
+package com.gyadam.booklibrary.bookLibrary.presentation.bookList.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth

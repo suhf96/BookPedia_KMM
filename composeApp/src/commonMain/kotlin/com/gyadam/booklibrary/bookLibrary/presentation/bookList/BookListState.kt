@@ -1,4 +1,4 @@
-package com.gyadam.booklibrary.bookLibrary.presentation.book_list
+package com.gyadam.booklibrary.bookLibrary.presentation.bookList
 
 import com.gyadam.booklibrary.bookLibrary.domain.Book
 import com.gyadam.booklibrary.core.presentation.UiText

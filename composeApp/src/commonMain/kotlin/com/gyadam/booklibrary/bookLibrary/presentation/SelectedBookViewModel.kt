@@ -1,4 +1,4 @@
-package com.gyadam.booklibrary.bookLibrary.presentation.book_list
+package com.gyadam.booklibrary.bookLibrary.presentation
 
 import androidx.lifecycle.ViewModel
 import com.gyadam.booklibrary.bookLibrary.domain.Book

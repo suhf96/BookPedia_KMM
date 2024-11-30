@@ -1,8 +1,7 @@
-package com.gyadam.booklibrary.bookLibrary.presentation.book_list.components
+package com.gyadam.booklibrary.bookLibrary.presentation.bookList.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions

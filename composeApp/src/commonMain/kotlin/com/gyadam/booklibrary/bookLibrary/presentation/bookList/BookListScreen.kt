@@ -1,4 +1,4 @@
-package com.gyadam.booklibrary.bookLibrary.presentation.book_list
+package com.gyadam.booklibrary.bookLibrary.presentation.bookList
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -38,8 +38,8 @@ import booklibrary.composeapp.generated.resources.no_favourites
 import booklibrary.composeapp.generated.resources.no_result
 import booklibrary.composeapp.generated.resources.search_result_tab
 import com.gyadam.booklibrary.bookLibrary.domain.Book
-import com.gyadam.booklibrary.bookLibrary.presentation.book_list.components.BookList
-import com.gyadam.booklibrary.bookLibrary.presentation.book_list.components.BookSearchBar
+import com.gyadam.booklibrary.bookLibrary.presentation.bookList.components.BookList
+import com.gyadam.booklibrary.bookLibrary.presentation.bookList.components.BookSearchBar
 import com.gyadam.booklibrary.core.presentation.DarkBlue
 import com.gyadam.booklibrary.core.presentation.DesertWhite
 import com.gyadam.booklibrary.core.presentation.SandYellow

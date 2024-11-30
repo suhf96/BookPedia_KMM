@@ -15,10 +15,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import com.gyadam.booklibrary.bookLibrary.presentation.book_list.BookListScreenRoot
-import com.gyadam.booklibrary.bookLibrary.presentation.book_list.BookListViewModel
-import com.gyadam.booklibrary.bookLibrary.presentation.book_list.SelectedBookViewModel
+import com.gyadam.booklibrary.bookLibrary.presentation.bookList.BookListScreenRoot
+import com.gyadam.booklibrary.bookLibrary.presentation.bookList.BookListViewModel
+import com.gyadam.booklibrary.bookLibrary.presentation.SelectedBookViewModel
+import com.gyadam.booklibrary.bookLibrary.presentation.bookDetails.BookDetailAction
+import com.gyadam.booklibrary.bookLibrary.presentation.bookDetails.BookDetailScreenRoot
+import com.gyadam.booklibrary.bookLibrary.presentation.bookDetails.BookDetailViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -57,9 +59,18 @@ fun App() {
                     val selectedBookViewModel =
                         entry.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = "Book ID ${selectedBook?.title}")
+                    val viewModel = koinViewModel<BookDetailViewModel>()
+                    LaunchedEffect(selectedBook) {
+                        selectedBook?.let {
+                            viewModel.onAction(BookDetailAction.OnSelectedBookChange(it))
+                        }
                     }
+                    BookDetailScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
             }
         }

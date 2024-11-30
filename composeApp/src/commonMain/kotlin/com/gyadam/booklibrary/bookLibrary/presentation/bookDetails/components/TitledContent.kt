@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 @Composable
 fun TitledContent(
     title: String,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(

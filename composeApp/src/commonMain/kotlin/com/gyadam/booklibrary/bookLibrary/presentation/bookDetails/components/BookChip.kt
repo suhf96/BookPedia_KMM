@@ -1,7 +1,10 @@
 package com.gyadam.booklibrary.bookLibrary.presentation.bookDetails.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -21,8 +24,8 @@ enum class ChipSize {
 @Composable
 fun BookChip(
     size: ChipSize = ChipSize.REGULAR,
-    chipContent: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    chipContent: @Composable RowScope.() -> Unit,
 ) {
     Box(
         modifier = modifier.widthIn(
@@ -34,7 +37,13 @@ fun BookChip(
             .background(LightBlue)
             .padding(vertical = 8.dp, horizontal = 12.dp),
         contentAlignment = Alignment.Center
-    ){
-        chipContent()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            chipContent()
+        }
+
     }
 }

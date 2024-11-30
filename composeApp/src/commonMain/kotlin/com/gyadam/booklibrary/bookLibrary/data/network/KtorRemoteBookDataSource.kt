@@ -1,5 +1,6 @@
 package com.gyadam.booklibrary.bookLibrary.data.network
 
+import com.gyadam.booklibrary.bookLibrary.data.dto.BookWorkDTO
 import com.gyadam.booklibrary.bookLibrary.data.dto.SearchResultsDTO
 import com.gyadam.booklibrary.bookLibrary.domain.Book
 import com.gyadam.booklibrary.core.data.safeCall
@@ -20,7 +21,7 @@ class KtorRemoteBookDataSource(
     override suspend fun searchBooks(
         query: String,
         resultLimit: Int?
-    ): Result<SearchResultsDTO, DataError.Remote> = safeCall {
+    ): Result<SearchResultsDTO, DataError.Remote> = safeCall<SearchResultsDTO> {
         httpClient.get(
             urlString = "$BASE_URL/search.json"
         ) {
@@ -30,4 +31,11 @@ class KtorRemoteBookDataSource(
             parameter("fields", FIELDS)
         }
     }
+
+    override suspend fun getBookDetails(bookWorkId: String): Result<BookWorkDTO, DataError.Remote> =
+        safeCall<BookWorkDTO> {
+            httpClient.get(
+                urlString = "$BASE_URL/works/$bookWorkId.json"
+            )
+        }
 }

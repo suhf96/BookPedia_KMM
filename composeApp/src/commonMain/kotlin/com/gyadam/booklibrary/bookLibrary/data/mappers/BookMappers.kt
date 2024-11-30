@@ -1,5 +1,7 @@
-package com.gyadam.booklibrary.bookLibrary.data.dto
+package com.gyadam.booklibrary.bookLibrary.data.mappers
 
+import com.gyadam.booklibrary.bookLibrary.data.database.BookEntity
+import com.gyadam.booklibrary.bookLibrary.data.dto.BookDTO
 import com.gyadam.booklibrary.bookLibrary.domain.Book
 
 fun BookDTO.toBook(): Book {
@@ -19,5 +21,21 @@ fun BookDTO.toBook(): Book {
         ratingCount = ratingsCount,
         numPages = numPagesMedian,
         numEditions = numEditions ?: 0
+    )
+}
+
+fun Book.toBookEntity(): BookEntity {
+    return BookEntity(
+        id = id,
+        title = title,
+        authors = authors,
+        description = description,
+        imageUrl = imageUrl,
+        languages = languages,
+        firstPublishYear = firstPublishYear,
+        ratingsAverage = averageRating,
+        ratingsCount = ratingCount,
+        numPagesMedian = numPages,
+        numberOfEdition = numEditions
     )
 }

@@ -1,6 +1,6 @@
 package com.gyadam.booklibrary.bookLibrary.data.repository
 
-import com.gyadam.booklibrary.bookLibrary.data.dto.toBook
+import com.gyadam.booklibrary.bookLibrary.data.mappers.toBook
 import com.gyadam.booklibrary.bookLibrary.data.network.RemoteBookDatasource
 import com.gyadam.booklibrary.bookLibrary.domain.Book
 import com.gyadam.booklibrary.bookLibrary.domain.repository.BookRepository

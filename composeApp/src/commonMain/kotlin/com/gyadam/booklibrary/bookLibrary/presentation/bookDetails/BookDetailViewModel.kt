@@ -39,8 +39,6 @@ class BookDetailViewModel(
                     )
                 }
             }
-
-            else -> {}
         }
     }
 

@@ -22,18 +22,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BookListViewModel(
-    private val repository: BookRepository
+    private val bookRepository: BookRepository
 ) : ViewModel() {
 
     private var cachedBooks = emptyList<Book>()
 
     private var searchJob: Job? = null
+    private var favouriteBookJob: Job? = null
     private val _state = MutableStateFlow(BookListState())
     val state = _state
         .onStart {
             if (cachedBooks.isEmpty()) {
                 observeSearchQuery()
             }
+            observeFavouriteBooks()
         }
         .stateIn(
             viewModelScope,
@@ -55,6 +57,18 @@ class BookListViewModel(
                 it.copy(selectedTabIndex = action.index)
             }
         }
+    }
+
+    private fun observeFavouriteBooks() {
+        favouriteBookJob?.cancel()
+        favouriteBookJob = bookRepository.getFavouriteBooks()
+            .onEach { favouriteBooks ->
+                _state.update {
+                    it.copy(
+                        favouriteBooks = favouriteBooks
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 
     @OptIn(FlowPreview::class)
@@ -87,7 +101,7 @@ class BookListViewModel(
                     isLoading = true
                 )
             }
-            repository.searchBooks(query).onSuccess { result ->
+            bookRepository.searchBooks(query).onSuccess { result ->
                 _state.update {
                     it.copy(
                         isLoading = false,

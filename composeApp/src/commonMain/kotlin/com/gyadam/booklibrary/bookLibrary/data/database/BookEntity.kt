@@ -10,7 +10,7 @@ data class BookEntity(
     val title: String,
     val authors: List<String>,
     val description: String?,
-    val imageUrl: String?,
+    val imageUrl: String,
     val languages: List<String>,
     val firstPublishYear: String?,
     val ratingsAverage: Double?,

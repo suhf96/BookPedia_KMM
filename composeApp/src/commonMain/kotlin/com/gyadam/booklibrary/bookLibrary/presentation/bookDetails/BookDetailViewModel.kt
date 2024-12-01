@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -24,6 +26,7 @@ class BookDetailViewModel(
     val state: StateFlow<BookDetailState> = _state
         .onStart {
             fetchBookDescription()
+            observeFavouriteStatus()
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value)
 
@@ -31,7 +34,18 @@ class BookDetailViewModel(
     fun onAction(action: BookDetailAction) {
         when (action) {
             is BookDetailAction.OnBackClick -> {}
-            is BookDetailAction.OnFavouriteClick -> {}
+            is BookDetailAction.OnFavouriteClick -> {
+                viewModelScope.launch {
+                    if (state.value.isFavourite) {
+                        bookRepository.deleteFromFavourites(bookId)
+                    } else {
+                        state.value.book?.let {
+                            bookRepository.markAsFavourite(it)
+                        }
+                    }
+                }
+            }
+
             is BookDetailAction.OnSelectedBookChange -> {
                 _state.update {
                     it.copy(
@@ -42,6 +56,16 @@ class BookDetailViewModel(
         }
     }
 
+    private fun observeFavouriteStatus() {
+        bookRepository.isBookFavourite(bookId)
+            .onEach { isFavourite ->
+                _state.update {
+                    it.copy(
+                        isFavourite = isFavourite
+                    )
+                }
+            }.launchIn(viewModelScope)
+    }
 
     private fun fetchBookDescription() {
         viewModelScope.launch {

@@ -1,5 +1,7 @@
 package com.gyadam.booklibrary.bookLibrary.app
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
@@ -35,7 +37,12 @@ fun App() {
                 startDestination = Routes.BookList
             ) {
 
-                composable<Routes.BookList> {
+                composable<Routes.BookList>(
+                    exitTransition = { slideOutHorizontally() },
+                    popEnterTransition = {
+                        slideInHorizontally()
+                    }
+                ) {
                     val selectedBookViewModel =
                         it.sharedKoinViewModel<SelectedBookViewModel>(navController)
 
@@ -50,7 +57,18 @@ fun App() {
                         },
                     )
                 }
-                composable<Routes.BookDetail> { entry ->
+                composable<Routes.BookDetail>(
+                    enterTransition = {
+                        slideInHorizontally { initialOffset ->
+                            initialOffset
+                        }
+                    },
+                    exitTransition = {
+                        slideOutHorizontally { initialOffset ->
+                            initialOffset
+                        }
+                    }
+                ) { entry ->
                     val selectedBookViewModel =
                         entry.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()

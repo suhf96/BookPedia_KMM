@@ -1,5 +1,8 @@
 package com.gyadam.booklibrary.di
 
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.gyadam.booklibrary.bookLibrary.data.database.DatabaseFactory
+import com.gyadam.booklibrary.bookLibrary.data.database.FavouriteBookDatabase
 import com.gyadam.booklibrary.bookLibrary.data.network.KtorRemoteBookDataSource
 import com.gyadam.booklibrary.bookLibrary.data.repository.DefaultBookRepository
 import com.gyadam.booklibrary.bookLibrary.data.network.RemoteBookDatasource
@@ -25,6 +28,16 @@ val sharedModule = module {
 
     singleOf(::DefaultBookRepository).bind<BookRepository>()
 
+
+    single {
+        get<DatabaseFactory>().create()
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
+
+    single {
+        get<FavouriteBookDatabase>().dao
+    }
     viewModelOf(::BookListViewModel)
     viewModelOf(::SelectedBookViewModel)
     viewModelOf(::BookDetailViewModel)

@@ -43,9 +43,11 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.gyadam.booklibrary.bookLibrary.domain.Book
 import com.gyadam.booklibrary.core.presentation.LightBlue
+import com.gyadam.booklibrary.core.presentation.PulseAnimation
 import com.gyadam.booklibrary.core.presentation.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.round
+
 @Composable
 fun BookListItem(
     book: Book,
@@ -92,7 +94,7 @@ fun BookListItem(
 
                 val painterState by painter.state.collectAsStateWithLifecycle()
                 val transition by animateFloatAsState(
-                    targetValue = if(painterState is AsyncImagePainter.State.Success) {
+                    targetValue = if (painterState is AsyncImagePainter.State.Success) {
                         1f
                     } else {
                         0f
@@ -101,7 +103,10 @@ fun BookListItem(
                 )
 
                 when (val result = imageLoadResult) {
-                    null -> CircularProgressIndicator()
+                    null -> PulseAnimation(
+                        modifier = Modifier.size(60.dp)
+                    )
+
                     else -> {
                         Image(
                             painter = if (result.isSuccess) painter else {

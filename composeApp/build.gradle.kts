@@ -113,6 +113,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":composeApp"))
     debugImplementation(compose.uiTooling)
 }
 

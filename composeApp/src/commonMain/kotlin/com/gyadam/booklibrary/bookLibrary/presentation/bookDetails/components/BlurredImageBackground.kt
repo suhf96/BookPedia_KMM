@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,6 +45,7 @@ import booklibrary.composeapp.generated.resources.remove_favourites
 import coil3.compose.rememberAsyncImagePainter
 import com.gyadam.booklibrary.core.presentation.DarkBlue
 import com.gyadam.booklibrary.core.presentation.DesertWhite
+import com.gyadam.booklibrary.core.presentation.PulseAnimation
 import com.gyadam.booklibrary.core.presentation.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -121,7 +123,15 @@ fun BlurredImageBackground(
                     targetState = imageLoadResult
                 ) { result ->
                     when (result) {
-                        null -> CircularProgressIndicator()
+                        null -> Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            PulseAnimation(
+                                modifier = Modifier.size(60.dp)
+                            )
+                        }
+
                         else -> {
                             Box {
                                 Image(
@@ -147,8 +157,8 @@ fun BlurredImageBackground(
                                     Icon(
                                         imageVector = if (isFavourite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                         tint = Color.Red,
-                                        contentDescription = if(isFavourite) stringResource(Res.string.remove_favourites) else
-                                        stringResource(Res.string.remove_favourites)
+                                        contentDescription = if (isFavourite) stringResource(Res.string.remove_favourites) else
+                                            stringResource(Res.string.remove_favourites)
                                     )
                                 }
                             }
